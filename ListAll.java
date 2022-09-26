@@ -11,26 +11,34 @@ public class ListAll {
         listInput.add(input);
         listChecker.add(false);
 
-        System.out.println("created! list #" + listInput.size());
+        System.out.println("created! list #" + listInput.size() + " - " + listInput.get(listInput.size() - 1));
     }
 
     public void removeList(int n){
+        System.out.println("list #" + n + " removed - " + listInput.get(n-1));
+
         listInput.remove(n-1);
         listChecker.remove(n-1);
-
-        System.out.println("list #" + n + " removed.");
     }
 
     public void markList(int n){
         if (listChecker.get(n-1) == true) {
+            System.out.println("list #" + n + " - " + listInput.get(n-1) + " unmarked!");
+
             listChecker.set(n-1, false);
-
-            System.out.println("list #" + n + " unmarked!");
         } else{
-            listChecker.set(n-1, true);
+            System.out.println("list #" + n + " - " + listInput.get(n-1) + " marked!");
 
-            System.out.println("list #" + n + " marked!");
+            listChecker.set(n-1, true);
         }
+    }
+
+    public void changeList(int n, String input){
+        System.out.print("list #" + n + " - " + listInput.get(n-1) + " changed to ");
+
+        listInput.set(n-1, input);
+
+        System.out.println(listInput.get(n-1) + " !");
     }
 
     public void checkList(){
@@ -52,7 +60,7 @@ public class ListAll {
         Scanner sc = new Scanner(System.in);
 
         // opening output w/ input
-        command.splitter(); command.intro(); command.help(); command.stuff(); command.insert();
+        command.splitter(); command.intro(); command.help(); command.insert();
         String input1 = sc.nextLine();
 
         // run until exit
@@ -71,7 +79,7 @@ public class ListAll {
                     list.addList(sc.nextLine()); command.splitter();
                 } else if (input2.equalsIgnoreCase("two")){
                     command.addMultiple();
-                    int n = sc.nextInt(); String bugCatcher = sc.nextLine(); // important because some stupid bug or smth idfk
+                    int n = sc.nextInt(); String bugCatcher = sc.nextLine(); // bug catcher or smth idfk
                     command.splitter();
                 
                     for (int temp = 0;temp < n;temp++){
@@ -91,17 +99,44 @@ public class ListAll {
                     command.removeOnce();
 
                     list.removeList(sc.nextInt()); command.splitter();
-                    String bugCatcher = sc.nextLine(); // important because some stupid bug or smth idfk
+                    String bugCatcher = sc.nextLine(); // bug
                 } else if (input2.equalsIgnoreCase("two")){
                     command.removeMultiple();
-                    int n = sc.nextInt(); String bugCatcher = sc.nextLine(); // important because some stupid bug or smth idfk
+                    int n = sc.nextInt(); String bugCatcher = sc.nextLine(); // bug
                     command.splitter();
                 
                     for (int temp = 0;temp < n;temp++){
                         command.removeOnce();
 
                         list.removeList(sc.nextInt()); command.splitter();
-                        String bugCatcher2 = sc.nextLine(); // important because some stupid bug or smth idfk
+                        String bugCatcher2 = sc.nextLine(); // bug
+                    }
+                } else command.miss();
+
+            // change
+            } else if (input1.equalsIgnoreCase("change")){
+                command.change();
+                String input2 = sc.nextLine();
+                command.splitter();
+
+                if (input2.equalsIgnoreCase("one")){
+                    command.changeOnce();
+                    int input3 = sc.nextInt(); String bugCatcher2 = sc.nextLine(); // bug
+                    String input4 = sc.nextLine();
+
+                    list.changeList(input3, input4); command.splitter();
+                } else if (input2.equalsIgnoreCase("two")){
+                    command.changeMultiple();
+                    int n = sc.nextInt(); String bugCatcher = sc.nextLine(); // bug
+                    command.splitter();
+                
+                    for (int temp = 0;temp < n;temp++){
+                        command.changeOnce();
+
+                        int input3 = sc.nextInt(); String bugCatcher2 = sc.nextLine(); // bug
+                        String input4 = sc.nextLine();
+    
+                        list.changeList(input3, input4); command.splitter();
                     }
                 } else command.miss();
 
@@ -115,17 +150,17 @@ public class ListAll {
                     command.markOnce();
 
                     list.markList(sc.nextInt()); command.splitter();
-                    String bugCatcher = sc.nextLine(); // important because some stupid bug or smth idfk
+                    String bugCatcher = sc.nextLine(); // bug
                 } else if (input2.equalsIgnoreCase("two")){
                     command.markMultiple();
-                    int n = sc.nextInt(); String bugCatcher = sc.nextLine(); // important because some stupid bug or smth idfk
+                    int n = sc.nextInt(); String bugCatcher = sc.nextLine(); // bug
                     command.splitter();
                 
                     for (int temp = 0;temp < n;temp++){
                         command.markOnce();
 
                         list.markList(sc.nextInt()); command.splitter();
-                        String bugCatcher2 = sc.nextLine(); // important because some stupid bug or smth idfk
+                        String bugCatcher2 = sc.nextLine(); // bug
                     }
                 } else command.miss();
 
@@ -158,17 +193,12 @@ final class Commands{
         System.out.println("=--------------------------------------------------------------------------------------------------------=");
     }
 
-    public void stuff(){
-        System.out.printf("hey this is uploaded to my school github so I can play around here again later (probably): https://github.com/itsgusyudis\n\n");
-    }
-
     public void insert(){
         System.out.print("please type your option: ");
     }
 
     public void intro(){
         System.out.println("welcome to ToDoList! like the name says, this is a program made for managing your to-do list.");
-        System.out.printf("for starters, please select one of these options to start things off:\n\n");
     }
 
     public void add(){
@@ -206,7 +236,7 @@ final class Commands{
     }
 
     public void changeOnce(){
-        System.out.print("please type your to-do list location to be changed: ");
+        System.out.print("please type your to-do list location to be changed and the to-do list text respectively (separate them with space, e.g. 2 new): ");
     }
 
     public void changeMultiple(){
@@ -242,7 +272,9 @@ final class Commands{
         exp = "exp -> exporting the to-do list to a .txt file (TO BE ADDED AS SIDE PROJECT IN THE FUTURE)";
         imp = "imp -> importing a .txt file to the program (TO BE ADDED AS SIDE PROJECT IN THE FUTURE)";
 
+        System.out.printf("please select one of these options:\n\n");
         System.out.printf("- %s\n- %s\n- %s\n- %s\n- %s\n- %s\n- %s\n- %s\n- %s\n\n", add, remove, mark, change, check, help, exp, imp, exit);
+        System.out.printf("hey this is uploaded to my school github so I can play around here again later (probably): https://github.com/itsgusyudis/ToDoList\n\n");
     }
 
     public void miss(){
